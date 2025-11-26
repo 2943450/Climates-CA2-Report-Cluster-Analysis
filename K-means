@@ -1,0 +1,51 @@
+# K-MEANS CLUSTERING
+
+
+from sklearn.cluster import KMeans
+
+# Choose the number of clusters
+k = 4
+
+# Initialize the model
+kmeans = KMeans(
+    n_clusters=k,
+    init='k-means++',
+    max_iter=500,
+    n_init=20,
+    random_state=40
+)
+
+# Fit K-means to standardized data
+kmeans.fit(scaled_data)
+
+# Cluster labels for each grid point
+kmeans_labels = kmeans.labels_
+
+# Cluster centroids (shape: k × number_of_features)
+centroids = kmeans.cluster_centers_
+
+print("K-means cluster labels:", kmeans_labels)
+print("Centroid matrix shape:", centroids.shape)
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# K-MEANS CLUSTER MAP
+
+# Create an empty grid for lat × lon points
+cluster_map = np.full((n_lat * n_lon), np.nan)
+
+# Fill the valid points with k-means labels
+cluster_map[missing_data] = kmeans_labels
+
+# Reshape back to 2D
+cluster_map_2d = cluster_map.reshape(n_lat, n_lon)
+
+# Plot the cluster map
+plt.figure(figsize=(12, 6))
+plt.imshow(cluster_map_2d, origin='lower', cmap='tab10')
+plt.colorbar(label='Cluster')
+plt.title('Extratropical Northern Hemisphere Winter Means')
+plt.xlabel('Longitude')
+plt.ylabel('Latitude')
+plt.show()
